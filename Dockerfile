@@ -2,12 +2,10 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY pyproject.toml .
+COPY . .
 
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -e .
-
-COPY . .
+ && pip install --no-cache-dir .
 
 EXPOSE 8080
 
