@@ -1,7 +1,4 @@
   ## Live Demo
   - **Dashboard**: https://devlog-zeta-ten.vercel.app
-  - **API**: https://devlog-api-production-b984.up.railway.app/docs
-
-  The /docs link is a bonus — FastAPI auto-generates interactive API documentation there.
-
+  - **API Docs**: https://devlog-api-production-b984.up.railway.app/docs
 
