@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class TagResponse(BaseModel):
@@ -16,6 +16,21 @@ class SessionCreate(BaseModel):
 
 class TagRequest(BaseModel):
     names: List[str]
+
+
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
 
 
 class SessionResponse(BaseModel):

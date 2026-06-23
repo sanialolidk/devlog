@@ -3,7 +3,6 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from devlog.db import Base
 
-# Many-to-many join table between sessions and tags
 session_tags = Table(
     "session_tags",
     Base.metadata,
@@ -12,14 +11,25 @@ session_tags = Table(
 )
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True, nullable=False, index=True)
+    hashed_password = Column(String, nullable=False)
+    sessions = relationship("Session", back_populates="user")
+
+
 class Session(Base):
     __tablename__ = "sessions"
 
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     description = Column(String, nullable=False)
     start_time = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     end_time = Column(DateTime, nullable=True)
     tags = relationship("Tag", secondary=session_tags, back_populates="sessions")
+    user = relationship("User", back_populates="sessions")
 
     @property
     def duration_minutes(self):

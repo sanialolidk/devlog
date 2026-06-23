@@ -19,6 +19,9 @@ dependencies = [
     "anthropic>=0.40",
     "slowapi>=0.1.9",
     "redis>=5.0",
+    "bcrypt>=4.0",
+    "python-jose[cryptography]>=3.3",
+    "pydantic[email]>=2.0",
 ]
 
 [project.scripts]

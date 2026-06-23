@@ -8,7 +8,7 @@ from slowapi.errors import RateLimitExceeded
 
 from devlog.api.limiter import limiter
 from devlog.api.jobs import hourly_summary
-from devlog.api.routes import sessions, tags
+from devlog.api.routes import sessions, tags, auth
 
 
 @asynccontextmanager
@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(sessions.router, prefix="/sessions", tags=["sessions"])
 app.include_router(tags.router, prefix="/tags", tags=["tags"])
 
