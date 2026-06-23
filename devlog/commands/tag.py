@@ -5,7 +5,7 @@ from devlog.models import Session, Tag
 console = Console()
 
 
-def tag_session(tags: tuple[str]):
+def tag_session(tags):
     db = get_session()
 
     # Tag the most recently started session (active or last completed)
