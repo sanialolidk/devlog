@@ -40,7 +40,7 @@ export function ActivityChart({ sessions }: Props) {
           <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} width={28} />
           <Tooltip
-            formatter={(v: number) => [`${v}h`, 'Time']}
+            formatter={(v) => [`${v}h`, 'Time']}
             contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
           />
           <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
