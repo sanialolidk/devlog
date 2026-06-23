@@ -7,7 +7,9 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 load_dotenv()
 
 _DEFAULT_DB = f"sqlite:///{Path.home() / '.devlog' / 'devlog.db'}"
-DATABASE_URL = os.getenv("DATABASE_URL", _DEFAULT_DB)
+_raw = os.getenv("DATABASE_URL", _DEFAULT_DB)
+# Railway (and Heroku) provide postgres:// but SQLAlchemy requires postgresql://
+DATABASE_URL = _raw.replace("postgres://", "postgresql://", 1) if _raw.startswith("postgres://") else _raw
 
 
 class Base(DeclarativeBase):
