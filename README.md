@@ -4,4 +4,4 @@
 
   The /docs link is a bonus — FastAPI auto-generates interactive API documentation there.
 
-✻ Brewed for 4s
+
