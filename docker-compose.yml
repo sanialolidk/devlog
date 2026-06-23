@@ -12,14 +12,24 @@ services:
       interval: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+
   api:
     build: .
     ports:
       - "8001:8000"
     environment:
       DATABASE_URL: postgresql://devlog:devlog@db:5432/devlog
+      REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: >
       sh -c "alembic upgrade head && uvicorn devlog.api.main:app --host 0.0.0.0 --port 8000"
