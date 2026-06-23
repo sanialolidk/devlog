@@ -1,21 +1,38 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DB_PATH = Path.home() / ".devlog" / "devlog.db"
+load_dotenv()
+
+_DEFAULT_DB = f"sqlite:///{Path.home() / '.devlog' / 'devlog.db'}"
+DATABASE_URL = os.getenv("DATABASE_URL", _DEFAULT_DB)
 
 
 class Base(DeclarativeBase):
     pass
 
 
-def get_engine():
-    DB_PATH.parent.mkdir(exist_ok=True)
-    return create_engine(f"sqlite:///{DB_PATH}", echo=False)
+def _make_engine():
+    if DATABASE_URL.startswith("sqlite"):
+        Path.home().joinpath(".devlog").mkdir(exist_ok=True)
+    return create_engine(DATABASE_URL, echo=False)
+
+
+engine = _make_engine()
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
 def get_session():
-    engine = get_engine()
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    return Session()
+    """For CLI commands: returns a plain session (caller must close)."""
+    return SessionLocal()
+
+
+def get_db():
+    """FastAPI dependency: yields a session and closes on teardown."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
