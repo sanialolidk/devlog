@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "devlog"
+version = "0.1.0"
+description = "A developer activity tracker CLI"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "sqlalchemy>=2.0",
+    "rich>=13.0",
+    "python-dotenv>=1.0",
+]
+
+[project.scripts]
+devlog = "devlog.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["devlog*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.0",
+]
