@@ -1,6 +1,6 @@
 import type { Session, Tag } from './types';
 
-const BASE = 'http://localhost:8001';
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8001';
 
 function getToken() {
   return localStorage.getItem('devlog_token');

@@ -25,7 +25,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://localhost:\d+",
+    allow_origin_regex=r"https?://.*\.vercel\.app|http://localhost:\d+",
     allow_methods=["*"],
     allow_headers=["*"],
 )
