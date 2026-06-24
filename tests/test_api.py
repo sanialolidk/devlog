@@ -40,7 +40,7 @@ def client():
 def auth_client(client):
     """Create a test user directly in the DB (bypasses rate limiting) and set auth header."""
     db = client._test_db()
-    user = User(email="test@example.com", hashed_password=hash_password("testpass123"))
+    user = User(email="test@example.com", hashed_password=hash_password("testpass1234"))
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -57,28 +57,28 @@ def test_health(client):
 
 
 def test_register(client):
-    r = client.post("/auth/register", json={"email": "new@example.com", "password": "pass123"})
+    r = client.post("/auth/register", json={"email": "new@example.com", "password": "pass1234"})
     assert r.status_code == 201
     assert "access_token" in r.json()
 
 
 def test_register_duplicate_email(client):
-    payload = {"email": "dup@example.com", "password": "pass"}
+    payload = {"email": "dup@example.com", "password": "pass1234"}
     client.post("/auth/register", json=payload)
     r = client.post("/auth/register", json=payload)
     assert r.status_code == 409
 
 
 def test_login(client):
-    client.post("/auth/register", json={"email": "login@example.com", "password": "pass"})
-    r = client.post("/auth/login", json={"email": "login@example.com", "password": "pass"})
+    client.post("/auth/register", json={"email": "login@example.com", "password": "pass1234"})
+    r = client.post("/auth/login", json={"email": "login@example.com", "password": "pass1234"})
     assert r.status_code == 200
     assert "access_token" in r.json()
 
 
 def test_login_wrong_password(client):
-    client.post("/auth/register", json={"email": "wp@example.com", "password": "correct"})
-    r = client.post("/auth/login", json={"email": "wp@example.com", "password": "wrong"})
+    client.post("/auth/register", json={"email": "wp@example.com", "password": "correct1"})
+    r = client.post("/auth/login", json={"email": "wp@example.com", "password": "wrong123"})
     assert r.status_code == 401
 
 

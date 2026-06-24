@@ -24,7 +24,7 @@ class Session(Base):
     __tablename__ = "sessions"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     description = Column(String, nullable=False)
     start_time = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     end_time = Column(DateTime, nullable=True)
