@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from devlog.api.deps import get_db
 from devlog.api.limiter import limiter
@@ -39,6 +39,7 @@ def list_sessions(
 
     query = (
         db.query(SessionModel)
+        .options(joinedload(SessionModel.tags))
         .filter(SessionModel.user_id == current_user.id)
         .order_by(SessionModel.start_time.desc())
     )

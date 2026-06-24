@@ -11,13 +11,12 @@ async def hourly_summary():
     """
     while True:
         await asyncio.sleep(3600)
+        db = get_session()
         try:
-            db = get_session()
             today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
             sessions = db.query(Session).filter(Session.start_time >= today).all()
             completed = [s for s in sessions if s.end_time]
             total_min = sum(s.duration_minutes or 0 for s in completed)
-            db.close()
             print(
                 f"[DevLog] Hourly digest — {len(sessions)} session(s) today, "
                 f"{round(total_min / 60, 1)}h logged",
@@ -25,3 +24,5 @@ async def hourly_summary():
             )
         except Exception as e:
             print(f"[DevLog] Background job error: {e}", flush=True)
+        finally:
+            db.close()

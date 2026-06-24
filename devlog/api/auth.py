@@ -9,7 +9,9 @@ from sqlalchemy.orm import Session
 from devlog.api.deps import get_db
 from devlog.models import User
 
-SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY environment variable is not set")
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_DAYS = 30
 

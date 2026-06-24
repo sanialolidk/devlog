@@ -44,7 +44,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
         <div className="flex items-center gap-4">
           {isLoading && <span className="text-xs text-gray-400 animate-pulse">Loading…</span>}
-          {isError && <span className="text-xs text-red-400">Can't reach API — is it running on :8001?</span>}
+          {isError && <span className="text-xs text-red-400">Can't reach API</span>}
           <button
             onClick={onLogout}
             className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
