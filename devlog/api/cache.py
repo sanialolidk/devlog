@@ -4,39 +4,52 @@ import redis
 
 _REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 _TTL = 30  # seconds
+_client = None
 
-try:
-    _client = redis.from_url(_REDIS_URL, decode_responses=True, socket_connect_timeout=1)
-    _client.ping()
-    _available = True
-except Exception:
-    _client = None
-    _available = False
+
+def _get_client():
+    global _client
+    if _client is not None:
+        return _client
+    try:
+        c = redis.from_url(_REDIS_URL, decode_responses=True, socket_connect_timeout=1)
+        c.ping()
+        _client = c
+        return _client
+    except Exception:
+        return None
 
 
 def get(key: str):
-    if not _available:
+    global _client
+    client = _get_client()
+    if not client:
         return None
     try:
-        raw = _client.get(key)
+        raw = client.get(key)
         return json.loads(raw) if raw else None
     except Exception:
+        _client = None
         return None
 
 
 def set(key: str, value):
-    if not _available:
+    global _client
+    client = _get_client()
+    if not client:
         return
     try:
-        _client.set(key, json.dumps(value), ex=_TTL)
+        client.set(key, json.dumps(value), ex=_TTL)
     except Exception:
-        pass
+        _client = None
 
 
 def delete(key: str):
-    if not _available:
+    global _client
+    client = _get_client()
+    if not client:
         return
     try:
-        _client.delete(key)
+        client.delete(key)
     except Exception:
-        pass
+        _client = None

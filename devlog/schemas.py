@@ -13,6 +13,16 @@ class TagResponse(BaseModel):
 class SessionCreate(BaseModel):
     description: str
 
+    @field_validator("description")
+    @classmethod
+    def description_not_empty(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Description cannot be empty")
+        if len(v) > 500:
+            raise ValueError("Description must be 500 characters or fewer")
+        return v
+
 
 class TagRequest(BaseModel):
     names: List[str]
